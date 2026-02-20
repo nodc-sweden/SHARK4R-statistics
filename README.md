@@ -7,8 +7,12 @@ These statistics are primarily intended for automated outlier detection and thre
 
 ## Repository Structure
 
-- **`code/`** — Scripts to update or generate statistics directly from SHARK.
-- **`fields/`** — Configuration data for defining recommended and required fields.
+- **`code/`** — Scripts to update or generate statistics and field definitions.
+  - `calculate_statistics.R` — Regenerate statistics from SHARK.
+  - `convert_fields.R` — Convert `fields/fields.R` to `fields/fields.rds`.
+- **`fields/`** — Configuration data for defining recommended and required fields per datatype.
+  - `fields.R` — Human-editable field definitions (required/recommended fields for each datatype).
+  - `fields.rds` — Serialized R object generated from `fields.R` via `convert_fields.R`.
 - **`statistics/`** — Precomputed `.rds` files containing threshold values and summary statistics.
 
 ---
@@ -58,6 +62,22 @@ check_outliers(
   custom_group = "location_sea_basin"
 )
 ```
+
+---
+
+## Field Definitions
+
+The `fields/` directory defines **required** and **recommended** fields for each SHARK datatype (e.g., Phytoplankton, Zoobenthos, PhysicalChemical).
+
+Field definitions are maintained in `fields/fields.R` as a named list. After editing, regenerate the `.rds` file:
+
+```bash
+Rscript code/convert_fields.R
+```
+
+The resulting `fields.rds` contains a list keyed by datatype, where each entry has `required` and `recommended` character vectors. Currently defined datatypes:
+
+Bacterioplankton, Chlorophyll, Epibenthos, EpibenthosDropvideo, GreySeal, HarbourPorpoise, HarbourSeal, PhysicalChemical, Phytoplankton, Picoplankton, PrimaryProduction, RingedSeal, SealPathology, Sedimentation, Zoobenthos, Zooplankton.
 
 ---
 
